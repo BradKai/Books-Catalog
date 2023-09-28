@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .logo{
+            height: 25px;
+            width: 50px;
+            padding-right: 6px;
+        }
+        .title{
+            padding-bottom: 0;
+        }
+        .small-button {
+            width: auto;
+            height: 20px;
+            font-size: 12px;
+            background-color: aqua;
+            border: none;
+            border-radius: 16px;
+        }
+        .update-delete{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 4px;
+        }
+        .placeholder{
+            height: 45%;
+        }
+        .add-card{
+            display: flex;
+            align-items: center;
+            /* text-align: center; */
+        }
+        .add-card:hover{
+            cursor: pointer;
+        }
+        .navbar{
+            background-color: rgb(9, 174, 219);
+        }
+        .card{
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+    </style>
+    <title>Books Catalog</title>
+</head>
+<body>
+    <nav class="navbar navbar-light">
+        <a class="navbar-brand" href="#">
+            <img src="/images/logo.png" class="logo" />BOOKS CATALOG</a>
+    </nav>
+    <div class="pt-3">
+        <h1 class="text-center">Welcome to the Books Catalog website</h1>
+        <p class="text-center">You can add, update, delete books from your own personalized book catalog!</p>
+    </div>
+    <hr />
+    <div class="d-flex flex-wrap justify-content-center">
+        <% books.forEach((book) => {%>
+        <div class="card m-3" style="width: 16rem;" data-bookid="<%= book._id %>">
+            <img src="/images/placeholder.avif" class="card-img-top placeholder" alt="placeholder">
+            <div class="card-body">
+                <h5 class="card-title pb-0 mb-0"><%= book.book_name %></h5>
+                <div class="d-flex justify-content-between mt-2 mb-2">
+                    <small class="pt-0"><%= book.author %></small>
+                    <button class="small-button"style="background-color: purple; color: white;"><%= book.status %></button>
+                </div>
+                <div>
+                    <% book.genre.forEach((genre) => { %>
+                        <button class="small-button"><%= genre %></button>
+                    <% }); %>
+                </div>                
+                <p class="card-text"><%= book.description %></p>
+                <div class="update-delete">
+                <button class="btn btn-primary update-book"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-danger delete-book"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+        <button type="button" class="card m-3 add-card bg-info d-flex flex-column justify-content-center" 
+            style="width: 16rem; height: 30rem;"
+            data-toggle="modal" data-target="#exampleModal">
+            <h5 class="card-title"><i class="fa-solid fa-plus fa-2xl" style="color: white;"></i></h5>
+        </button>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add Book</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-container">
+                    <form action="/add-book" method="POST" enctype="application/x-www-form-urlencoded">
+                        <div class="form-group">
+                            <label for="book-name">Book Name</label>
+                            <input type="text" class="form-control" id="book-name" name="book_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author-name">Author</label>
+                            <input type="text" class="form-control" id="author-name" name="author" required>
+                        </div>
+                        <div>
+                        <label for="genre">Genre</label>
+                    </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Mystery" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox1">Mystery</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Psychological" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox2">Psychological</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Sci-fi" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox3">Sci-fi</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="Historical" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox4">Historical</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="Romance" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox5">Romance</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="Action" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox6">Action</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox7" value="Thriller" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox7">Thriller</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="book-description">Book Description</label>
+                            <textarea class="form-control" id="book-description" rows="3" name="description" required></textarea>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="completed-check" value="Read" name="status">
+                            <label class="form-check-label" for="completed-check">Read/Unread</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="updateModalLabel">Update book</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-container">
+                    <form id="updateForm" enctype="application/x-www-form-urlencoded">
+                        <div class="form-group">
+                            <label for="book-name2">Book Name</label>
+                            <input type="text" class="form-control" id="book-name2" name="book_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author-name2">Author</label>
+                            <input type="text" class="form-control" id="author-name2" name="author" required>
+                        </div>
+                        <input type="text" class="form-control" id="book_id" name="book-id" hidden>
+                        <div>
+                        <label for="genre">Genre</label>
+                    </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox21" value="Mystery" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox21">Mystery</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox22" value="Psychological" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox22">Psychological</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox23" value="Sci-fi" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox23">Sci-fi</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox24" value="Historical" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox24">Historical</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox25" value="Romance" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox25">Romance</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox26" value="Action" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox26">Action</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox27" value="Thriller" name="genre">
+                            <label class="form-check-label" for="inlineCheckbox27">Thriller</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="book-description">Book Description</label>
+                            <textarea class="form-control" id="book-description2" rows="3" name="description" required></textarea>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="completed-check2" value="Read" name="status">
+                            <label class="form-check-label" for="completed-check2">Read/Unread</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-book');
+            const updateButtons = document.querySelectorAll('.update-book');
+
+            const updateModal = document.getElementById('updateModal');
+            // const updateForm = updateModal.querySelector('form');
+            const updateForm = document.getElementById('updateForm');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async function () {
+                    const bookId = button.closest('.card').dataset.bookid;
+                    const confirmation = confirm('Are you sure you want to delete this book?');
+
+                    if (confirmation) {
+                        try {
+                            const response = await fetch(`/books/${bookId}`, {
+                                method: 'DELETE',
+                            });
+
+                            if (response.status === 204) {
+                                button.closest('.card').remove();
+                            } else if (response.status === 404) {
+                                alert('Book not found');
+                            } else {
+                                alert('Error deleting book');
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            alert('An error occurred while deleting the book');
+                        }
+                    }
+                });
+            });
+
+            updateButtons.forEach((button) => {
+                button.addEventListener('click', async function () {
+                    const bookId = button.closest('.card').dataset.bookid;
+
+                    const response = await fetch(`/books/${bookId}`);
+                    if (response.status === 200) {
+                        const bookData = await response.json();
+                        updateForm.querySelector('#book-name2').value = bookData.book_name;
+                        updateForm.querySelector('#author-name2').value = bookData.author;
+                        const genreCheckboxes = updateForm.querySelectorAll('input[name="genre"]');
+                        genreCheckboxes.forEach((checkbox) => {
+                            checkbox.checked = bookData.genre.includes(checkbox.value);
+                        });
+                        updateForm.querySelector('#book-description2').value = bookData.description;
+                        const statusCheckbox = updateForm.querySelector('#completed-check2');
+                        statusCheckbox.checked = bookData.status === 'Read';
+                        if(!statusCheckbox.checked){
+                            statusCheckbox.value = "Unread";
+                        }
+                        updateForm.querySelector('#book_id').value = bookId;
+
+                        $(updateModal).modal('show');
+                    }
+                });
+            });
+            updateForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const formData = new FormData(updateForm);
+                const bookId = updateForm.querySelector('#book_id').value;
+                const serializedFormData = new URLSearchParams(formData).toString();
+                //Remember
+                // new URLSearchParams(formData): This part creates a new URLSearchParams
+                // object by passing the formData object as an argument. URLSearchParams is a
+                // built-in JavaScript class that allows you to work with query string parameters
+                // in a URL-like format.
+                try {
+                    const response = await fetch(`/books/${bookId}`, {
+                        method: 'PUT',
+                        body: serializedFormData,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    });
+                    if (response.status === 200) {
+                        $('#updateModal').modal('hide');
+                        location.reload();
+                    } else if (response.status === 404) {
+                        alert('Book not found');
+                    } else {
+                        alert('Error updating book');
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert('An error occurred while updating the book');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
